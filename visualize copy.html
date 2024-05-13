@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>visualize-copy</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="visualize copy_files/libs/clipboard/clipboard.min.js"></script>
+<script src="visualize copy_files/libs/quarto-html/quarto.js"></script>
+<script src="visualize copy_files/libs/quarto-html/popper.min.js"></script>
+<script src="visualize copy_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="visualize copy_files/libs/quarto-html/anchor.min.js"></script>
+<link href="visualize copy_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="visualize copy_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="visualize copy_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="visualize copy_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="visualize copy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data visualisation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<blockquote class="blockquote">
+<p>“The simple graph has brought more information to the data analyst’s mind than any other device.” — John Tukey</p>
+</blockquote>
+<p>This chapter will teach you how to visualise your data using Altair. Python has several systems for making graphs, but altiar is one of the most elegant and versatile. Altair implements the <strong>declarative visualization</strong> much like the <strong>grammar of graphics</strong>, a coherent system for describing and building graphs. With altair, you can do more faster by learning one system and applying it in many places.</p>
+<p>If you’d like to learn more about Altair before you start, I’d recommend reading “Altair: Interactive Statistical Visualizations for Python”, <a href="https://joss.theoj.org/papers/10.21105/joss.01057.pdf" class="uri">https://joss.theoj.org/papers/10.21105/joss.01057.pdf</a>.</p>
+<p>We should note that we are building this book using R with the package bookdown. Rendering Altair graphics using a python chunk is not straight forward but is not important for our use in VS Code. In VS Code the example chunks will render in the interactive Python viewer automatically. The following R code chunks show how we are rendering the Altair graphics in this book. Thanks to ijlyttle for <a href="https://gist.github.com/ijlyttle/aa314d02b5f7f85702ea2a648393b21f">his GitHub Gist</a>.</p>
+<!-- # ```{r, echo=FALSE}
+# vegawidget::as_vegaspec(py$chart$to_json()) -->
+</section>
+<section id="for-python-examples-that-show-chart.save" class="level1">
+<h1>For Python examples that show chart.save()</h1>
+<!-- # ```{r, message = FALSE, echo=FALSE}
+# knitr::include_graphics("screenshots/chartp_chartleft.png")
+# ``` -->
+<section id="prerequisites" class="level3">
+<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
+<p>This chapter focusses on Altair. Language has been shifted using the material from <a href="https://altair-viz.github.io/index.html">Altair’s materials</a>. To access the datasets, help pages, and functions that we will use in this chapter, load the Python data science tools by running this code:</p>
+<div class="columns">
+<div class="column" style="width:49%;">
+<section id="altair" class="level6">
+<h6 class="anchored" data-anchor-id="altair">Altair</h6>
+<div id="3a8f5743" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np   </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</div><div class="column" style="width:1%;">
+<!-- blank -->
+</div><div class="column" style="width:49%;">
+<section id="plotly-express" class="level6">
+<h6 class="anchored" data-anchor-id="plotly-express">Plotly Express</h6>
+<div id="442fed80" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</div>
+</div>
+<p>If you run this code and get the error message “No module named ‘altair’” or “No module named ‘pandas’”, you’ll need to first install them.</p>
+<div id="183a89f9" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>m pip install pandas altair</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You only need to install a package once, but you need to reload it every time you start a new session.</p>
+</section>
+<section id="altair-data-management" class="level3">
+<h3 class="anchored" data-anchor-id="altair-data-management">Altair data management</h3>
+<p>When <a href="https://altair-viz.github.io/user_guide/data.html#user-guide-data">specifying data in Altair</a>, we can use pandas DataFrame objects or other Altair options. According to the <a href="https://altair-viz.github.io/user_guide/faq.html#why-does-altair-lead-to-such-extremely-large-notebooks">Altair documentation</a>, the use of a pandas DataFrame will prompt Altair to store the entire data set in JSON format in the chart object. You should be carefully creating Altair specs with all the data in the chart object for use in HTML or Jupyter Notebooks. If you try to plot a data set with more than 5000 rows, Altair will return a <a href="https://altair-viz.github.io/user_guide/faq.html#altair-faq-max-rows">maxRowsError</a>.</p>
+<p>In this book, we will save the Altair chart as a ‘.png’ file to avoid dealing with large stored data in our ‘.html’ files. We have elected to use the <a href="https://altair-viz.github.io/user_guide/faq.html#local-filesystem">Local Filesystem</a> approach proposed by Altair. They do note that the filesystem approach may not work on some cloud-based Jupyter notebook services.</p>
+<div id="c662ef98" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>alt.data_transformers.enable(<span class="st">'json'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="114">
+<pre><code>DataTransformerRegistry.enable('json')</code></pre>
+</div>
+</div>
+</section>
+<section id="first-steps" class="level2">
+<h2 class="anchored" data-anchor-id="first-steps">First steps</h2>
+<p>Let’s use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? You probably already have an answer, but try to make your answer precise. What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?</p>
+<section id="the-mpg-data-frame" class="level3">
+<h3 class="anchored" data-anchor-id="the-mpg-data-frame">The <code>mpg</code> data frame</h3>
+<p>You can test your answer with the <code>mpg</code> <strong>data frame</strong> found in ggplot2 (aka <code>ggplot2::mpg</code>). A data frame is a rectangular collection of variables (in the columns) and observations (in the rows). The <em>‘mpg’</em> data contains observations collected by the US Environmental Protection Agency on 38 models of car. We will identify the <em>‘mpg’</em> data using <code>mpg</code> for the remainder of this introduction.</p>
+<div id="27b8d195" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://github.com/byuidatascience/data4python4ds/raw/master/data-raw/mpg/mpg.csv"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mpg <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Among the variables in <code>mpg</code> are:</p>
+<ol type="1">
+<li><p><code>displ</code>, a car’s engine size, in litres.</p></li>
+<li><p><code>hwy</code>, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.</p></li>
+</ol>
+<p>To learn more about <code>mpg</code>, read its format at <a href="https://github.com/byuidatascience/data4python4ds/blob/master/data.md">data4python4ds</a>.</p>
+</section>
+<section id="creating-an-altair-plot" class="level3">
+<h3 class="anchored" data-anchor-id="creating-an-altair-plot">Creating an Altair plot</h3>
+<p>To plot <code>mpg</code>, run this code to put <code>displ</code> on the x-axis and <code>hwy</code> on the y-axis:</p>
+<div id="c73ae477" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'displ'</span>, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">'hwy'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="116">
+
+<style>
+  #altair-viz-804460fb4e3e447a8a02d8d9f89118bc.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-804460fb4e3e447a8a02d8d9f89118bc.vega-embed details,
+  #altair-viz-804460fb4e3e447a8a02d8d9f89118bc.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-804460fb4e3e447a8a02d8d9f89118bc"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-804460fb4e3e447a8a02d8d9f89118bc") {
+      outputDiv = document.getElementById("altair-viz-804460fb4e3e447a8a02d8d9f89118bc");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#```{r, echo=FALSE, fig.align=“left”} #knitr::include_graphics(“screenshots/altair_viz_1.png”) #````</p>
+<p>The plot shows a negative relationship between engine size (<code>displ</code>) and fuel efficiency (<code>hwy</code>). In other words, cars with big engines use more fuel. Does this confirm or refute your hypothesis about fuel efficiency and engine size?</p>
+<p>With Altair, you begin a plot with the function <code>Chart()</code>. <code>Chart()</code> creates a Chart object that you can add layers to. The only argument of <code>Chart()</code> is the dataset to use in the graph. So <code>Chart(mpg)</code> creates an Chart object upon which we can marks.</p>
+<p>You complete your graph by adding one or more marks to <code>Chart()</code>. The attribute <code>.mark_point()</code> adds a layer of points to your plot, which creates a scatterplot. Altair comes with many mark methods that each add a different type of layer to a plot. You’ll learn a whole bunch of them throughout this chapter.</p>
+<p>Each mark method in Altair has an <code>.encode()</code> attribute. This defines how variables in your dataset are encoded to visual properties. The <code>.encode()</code> method is always paired with <code>x</code> and <code>y</code> arguments to specify which variables to map to the x and y axes. Altair looks for the encoded variables in the <code>data</code> argument, in this case, <code>mpg</code>. For pandas dataframes, Altair automatically determines the appropriate data type for the mapped column.</p>
+</section>
+<section id="a-graphing-template" class="level3">
+<h3 class="anchored" data-anchor-id="a-graphing-template">A graphing template</h3>
+<p>Let’s turn this code into a reusable template for making graphs with ggplot2. To make a graph, replace the bracketed sections in the code below with a dataset, a geom function, or a collection of mappings.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(alt.Chart(<span class="op">&lt;</span>DATA<span class="op">&gt;</span>)  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>   .encode(<span class="op">&lt;</span>ENCODINGS<span class="op">&gt;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>.mark_<span class="op">*</span>()<span class="op">&gt;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The rest of this chapter will show you how to complete and extend this template to make different types of graphs. We will begin with the <code>&lt;ENCODINGS&gt;</code> component.</p>
+</section>
+<section id="exercises" class="level3">
+<h3 class="anchored" data-anchor-id="exercises">Exercises</h3>
+<ol type="1">
+<li><p>Run <code>Chart(mpg).mark_point()</code>. What do you see?</p></li>
+<li><p>How many rows are in <code>mpg</code>? How many columns?</p></li>
+<li><p>What does the <code>drv</code> variable describe?</p></li>
+<li><p>Make a scatterplot of <code>hwy</code> vs <code>cyl</code>.</p></li>
+<li><p>What happens if you make a scatterplot of <code>class</code> vs <code>drv</code>? Why is the plot not useful?</p></li>
+</ol>
+</section>
+</section>
+<section id="aesthetic-mappings" class="level2">
+<h2 class="anchored" data-anchor-id="aesthetic-mappings">Aesthetic mappings</h2>
+<blockquote class="blockquote">
+<p>“The greatest value of a picture is when it forces us to notice what we never expected to see.” — John Tukey</p>
+</blockquote>
+<p>In the plot below, one group of points (highlighted in red) seems to fall outside of the linear trend. These cars have a higher mileage than you might expect. How can you explain these cars?</p>
+<div id="53bb216e" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>chartC <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">'displ'</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">'hwy'</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> alt.condition(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      (alt.datum.displ <span class="op">&gt;</span> <span class="dv">5</span>) <span class="op">&amp;</span> (alt.datum.hwy <span class="op">&gt;</span> <span class="dv">20</span>) , </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      alt.ColorValue(<span class="st">'red'</span>), </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      alt.ColorValue(<span class="st">'black'</span>)),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    size <span class="op">=</span> alt.condition(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      (alt.datum.displ <span class="op">&gt;</span> <span class="dv">5</span>) <span class="op">&amp;</span> (alt.datum.hwy <span class="op">&gt;</span> <span class="dv">20</span>), </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      alt.SizeValue(<span class="dv">50</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      alt.SizeValue(<span class="dv">25</span>))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>chartC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="117">
+
+<style>
+  #altair-viz-bd997ed3321c4998a451ccf0226ed9c5.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-bd997ed3321c4998a451ccf0226ed9c5.vega-embed details,
+  #altair-viz-bd997ed3321c4998a451ccf0226ed9c5.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-bd997ed3321c4998a451ccf0226ed9c5"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-bd997ed3321c4998a451ccf0226ed9c5") {
+      outputDiv = document.getElementById("altair-viz-bd997ed3321c4998a451ccf0226ed9c5");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"color": {"condition": {"test": "((datum.displ > 5) && (datum.hwy > 20))", "value": "red"}, "value": "black"}, "size": {"condition": {"test": "((datum.displ > 5) && (datum.hwy > 20))", "value": 50}, "value": 25}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_condition_chart.png") #</code></p>
+<p>Let’s hypothesize that the cars are hybrids. One way to test this hypothesis is to look at the <code>class</code> value for each car. The <code>class</code> variable of the <code>mpg</code> dataset classifies cars into groups such as compact, midsize, and SUV. If the outlying points are hybrids, they should be classified as compact cars or, perhaps, subcompact cars (keep in mind that this data was collected before hybrid trucks and SUVs became popular).</p>
+<p>You can add a third variable, like <code>class</code>, to a two dimensional scatterplot by mapping it to an <strong>encoding</strong>. An encoding is a visual property of the objects in your plot. Encodings include things like the size, the shape, or the color of your points. You can display a point (like the one below) in different ways by changing the values of its encoded properties. Since we already use the word “value” to describe data, let’s use the word “level” to describe encoded properties. Here we change the levels of a point’s size, shape, and color to make the point small, triangular, or blue:</p>
+<p>#<code>{r, echo=FALSE, fig.align="left"} #knitr::include_graphics("images/encode_example.png") #</code></p>
+<p>You can convey information about your data by mapping the encodings in your plot to the variables in your dataset. For example, you can map the colors of your points to the <code>class</code> variable to reveal the class of each car.</p>
+<div id="fe1c974b" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> <span class="st">"class"</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="118">
+
+<style>
+  #altair-viz-70165812da854e839e355e57ee9d7ebf.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-70165812da854e839e355e57ee9d7ebf.vega-embed details,
+  #altair-viz-70165812da854e839e355e57ee9d7ebf.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-70165812da854e839e355e57ee9d7ebf"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-70165812da854e839e355e57ee9d7ebf") {
+      outputDiv = document.getElementById("altair-viz-70165812da854e839e355e57ee9d7ebf");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"color": {"field": "class", "type": "nominal"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_viz_2.png") #</code></p>
+<p>(We don’t prefer British English, like Hadley, so don’t use <code>colour</code> instead of <code>color</code>.)</p>
+<p>To map an encoding to a variable, associate the name of the encoding to the name of the variable inside <code>.encode()</code>. Altair will automatically assign a unique level of the encoding (here a unique color) to each unique value of the variable, a process known as <strong>scaling</strong>. Altair will also add a legend that explains which levels correspond to which values.</p>
+<p>The colors reveal that many of the unusual points are two-seater cars. These cars don’t seem like hybrids, and are, in fact, sports cars! Sports cars have large engines like SUVs and pickup trucks, but small bodies like midsize and compact cars, which improves their gas mileage. In hindsight, these cars were unlikely to be hybrids since they have large engines.</p>
+<p>In the above example, we mapped <code>class</code> to the color encoding, but we could have mapped <code>class</code> to the size encoding in the same way. In this case, the exact size of each point would reveal its class affiliation. Mapping an unordered variable (<code>class</code>) to an ordered aesthetic (<code>size</code>) is not a good idea.</p>
+<div id="8cd9ab5f" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    size <span class="op">=</span> <span class="st">"class"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="119">
+
+<style>
+  #altair-viz-3420f8ad372c42a88246f74df6113551.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-3420f8ad372c42a88246f74df6113551.vega-embed details,
+  #altair-viz-3420f8ad372c42a88246f74df6113551.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-3420f8ad372c42a88246f74df6113551"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-3420f8ad372c42a88246f74df6113551") {
+      outputDiv = document.getElementById("altair-viz-3420f8ad372c42a88246f74df6113551");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"size": {"field": "class", "type": "nominal"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_viz_3.png") #</code></p>
+<p>Or we could have mapped <code>class</code> to the <em>opacity</em> encoding, which controls the transparency of the points, or to the shape encoding, which controls the shape of the points.</p>
+<div id="07c98a0b" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>chart1 <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    opacity <span class="op">=</span> <span class="st">"class"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Second</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>chart2 <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    shape <span class="op">=</span> <span class="st">"class"</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  .mark_point())</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>chart1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="120">
+
+<style>
+  #altair-viz-20ce8504216c49d9af51e7fddfeae651.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-20ce8504216c49d9af51e7fddfeae651.vega-embed details,
+  #altair-viz-20ce8504216c49d9af51e7fddfeae651.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-20ce8504216c49d9af51e7fddfeae651"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-20ce8504216c49d9af51e7fddfeae651") {
+      outputDiv = document.getElementById("altair-viz-20ce8504216c49d9af51e7fddfeae651");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"opacity": {"field": "class", "type": "nominal"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="30071076" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>chart2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="121">
+
+<style>
+  #altair-viz-cd599079edbb4dbfb7db9abefa241e03.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-cd599079edbb4dbfb7db9abefa241e03.vega-embed details,
+  #altair-viz-cd599079edbb4dbfb7db9abefa241e03.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-cd599079edbb4dbfb7db9abefa241e03"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-cd599079edbb4dbfb7db9abefa241e03") {
+      outputDiv = document.getElementById("altair-viz-cd599079edbb4dbfb7db9abefa241e03");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "point"}, "encoding": {"shape": {"field": "class", "type": "nominal"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE} #knitr::include_graphics("screenshots/altair_opacity.png") #knitr::include_graphics("screenshots/altair_shape.png") #</code></p>
+<p>Altair will only use 8 shapes for one chart. Charting more than 8 shapes is not recommended as the shapes simply recycle.</p>
+<p>For each encoding, you use <code>.encode()</code> to associate the name of the encoding with a variable to display. The <code>.encode()</code> function gathers together each of the encoded mappings used by a layer and passes them to the layer’s mapping argument. The syntax highlights a useful insight about <code>x</code> and <code>y</code>: the x and y locations of a point are themselves encodings, visual properties that you can map to variables to display information about the data.</p>
+<p>Once you map an encoding, Altair takes care of the rest. It selects a reasonable scale to use with the encoding, and it constructs a legend that explains the mapping between levels and values. For x and y aesthetics, Altair does not create a legend, but it creates an axis line with tick marks and a label. The axis line acts as a legend; it explains the mapping between locations and values.</p>
+<p>You can also <em>configure</em> the encoding properties of your mark manually. For example, we can make all of the points in our plot blue:</p>
+<div id="911376d0" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> alt.value(<span class="st">"blue"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="122">
+
+<style>
+  #altair-viz-acc27791e68d4798a50661710f488e4f.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-acc27791e68d4798a50661710f488e4f.vega-embed details,
+  #altair-viz-acc27791e68d4798a50661710f488e4f.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-acc27791e68d4798a50661710f488e4f"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-acc27791e68d4798a50661710f488e4f") {
+      outputDiv = document.getElementById("altair-viz-acc27791e68d4798a50661710f488e4f");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"color": {"value": "blue"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_viz_4.png") #</code></p>
+<p>Here, the color doesn’t convey information about a variable, but only changes the appearance of the plot. To set an encoding manually, use <code>alt.value()</code> by name as an argument of your <code>.encode()</code> function; i.e.&nbsp;the value goes <em>inside</em> of <code>alt.value()</code>. You’ll need to pick a level that makes sense for that encoding:</p>
+<ul>
+<li><p>The name of a color as a character string.</p></li>
+<li><p>The size of a point in pixels.</p></li>
+<li><p>The shape of a point as a character string.</p></li>
+</ul>
+<p>Note that only a limited set of mark properties can be bound to encodings, so for some (e.g.&nbsp;fillOpacity, strokeOpacity, etc.) the encoding approach using <code>alt.value()</code> is not available. Encoding settings will always override local or global configuration settings. There are other methods for manually encoding properties as explained in the <a href="https://altair-viz.github.io/user_guide/customization.html">Altair documentation</a></p>
+<section id="exercises-1" class="level3">
+<h3 class="anchored" data-anchor-id="exercises-1">Exercises</h3>
+<ol type="1">
+<li><p>Which variables in <code>mpg</code> are categorical? Which variables are continuous? How can you see this information when you run <code>mpg</code>? (Hint <code>mpg.dtypes</code>)</p></li>
+<li><p>Map a continuous variable to <code>color</code>, <code>size</code>, and <code>shape</code>. How do these aesthetics behave differently for categorical vs.&nbsp;continuous variables?</p></li>
+<li><p>What happens if you map the same variable to multiple encodings?</p></li>
+<li><p>What does the <code>stroke</code> encoding do? What shapes does it work with? (Hint: use <code>mark_point()</code>)</p></li>
+</ol>
+</section>
+</section>
+<section id="common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<p>As you start to run Python code, you’re likely to run into problems. Don’t worry — it happens to everyone. I have been writing Python code for months, and every day I still write code that doesn’t work!</p>
+<p>Start by carefully comparing the code that you’re running to the code in the book. Python is extremely picky, and a misplaced character can make all the difference. Make sure that every <code>(</code> is matched with a <code>)</code> and every <code>"</code> is paired with another <code>"</code>.</p>
+<p>One common problem when creating Altair graphics as shown in this book, is to put the <code>()</code> in the wrong place: the <code>(</code> comes before the <code>alt.chart()</code> command and the <code>)</code> has to come at the end of the command.</p>
+<p>For example the code below works in Python.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(mpg).encode(x <span class="op">=</span> <span class="st">"displ"</span>, y <span class="op">=</span> <span class="st">"hwy"</span>).mark_circle()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>However, the complexity of the more details graphics necessitates placing the code on multiple lines. When using multiple lines we need the enclosing <code>()</code>. Make sure you haven’t accidentally excluded a <code>(</code> or <code>)</code> like this</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(alt.Chart(mpg)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>or placed the <code>()</code> incorrectly like this</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(chart <span class="op">=</span> alt.Chart(mpg)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you’re still stuck, try the help. You can get help about any Altair function from their website - <a href="https://altair-viz.github.io/" class="uri">https://altair-viz.github.io/</a>, or hovering over the function name in VS Code. If that doesn’t help, carefully read the error message. Sometimes the answer will be buried there! But when you’re new to Python, the answer might be in the error message but you don’t yet know how to understand it. Another great tool is Google: try googling the error message, as it’s likely someone else has had the same problem, and has gotten help online.</p>
+</section>
+<section id="facets" class="level2">
+<h2 class="anchored" data-anchor-id="facets">Facets</h2>
+<p>One way to add additional variables is with encodings. Another way, particularly useful for categorical variables, is to split your plot into <strong>facets</strong>, subplots that each display one subset of the data.</p>
+<p>To facet your plot by a single variable, use <code>.facet()</code>. Assign a discrete variable to the <code>.facet</code> argument and adjust the size of your facet grid using the <code>columns</code> argument.</p>
+<div id="bda6684f" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>chart_f <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>   )</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  .facet(</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    facet <span class="op">=</span> <span class="st">"class"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    columns <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>chart_f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="123">
+
+<style>
+  #altair-viz-9a230ad205bb46b588ce91f5c434e565.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-9a230ad205bb46b588ce91f5c434e565.vega-embed details,
+  #altair-viz-9a230ad205bb46b588ce91f5c434e565.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-9a230ad205bb46b588ce91f5c434e565"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-9a230ad205bb46b588ce91f5c434e565") {
+      outputDiv = document.getElementById("altair-viz-9a230ad205bb46b588ce91f5c434e565");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "facet": {"field": "class", "type": "nominal"}, "spec": {"mark": {"type": "circle"}, "encoding": {"x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}}, "columns": 4, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{R, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_facet_1.png") #</code></p>
+<p>To facet your plot on the combination of two variables, the first argument of <code>.facet()</code> is <code>column</code> and the second is <code>row</code>. This time the formula should contain two discrete variable names.</p>
+<div id="e99d50f2" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>chart_f2 <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  .facet(</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    column <span class="op">=</span> <span class="st">"drv"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> <span class="st">"cyl"</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>chart_f2.save(<span class="st">"screenshots/altair_facet_2.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>#<code>{R, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_facet_2.png") #</code></p>
+<p>If you prefer to not facet in the rows or columns dimension, simply remove that facet argument. You can read more about <a href="https://altair-viz.github.io/user_guide/compound_charts.html">compound charts in the Altair documentation</a>.</p>
+<section id="exercises-2" class="level3">
+<h3 class="anchored" data-anchor-id="exercises-2">Exercises</h3>
+<ol type="1">
+<li><p>What happens if you facet on a continuous variable?</p></li>
+<li><p>What do the empty cells in plot with <code>.facet(column = "drv", row = "cyl")</code> mean? How do they relate to this plot?</p>
+<div id="6a412da0" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>(alt.Chart(mpg)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"drv"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"cyl"</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="125">
+
+<style>
+  #altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85.vega-embed details,
+  #altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85") {
+      outputDiv = document.getElementById("altair-viz-10ab99c1da3541a2b2f2bf84e48d8f85");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"x": {"field": "drv", "type": "nominal"}, "y": {"field": "cyl", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div></li>
+<li><p>What plots does the following code make? What does <code>.</code> do?</p>
+<div id="feef9cd9" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>(alt.Chart(mpg)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  .facet(column <span class="op">=</span> <span class="st">"drv"</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>(alt.Chart(mpg)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  .facet(row <span class="op">=</span> <span class="st">"cyl"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="126">
+
+<style>
+  #altair-viz-7a19c1ffca1a4dddba20f659139a9175.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-7a19c1ffca1a4dddba20f659139a9175.vega-embed details,
+  #altair-viz-7a19c1ffca1a4dddba20f659139a9175.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-7a19c1ffca1a4dddba20f659139a9175"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-7a19c1ffca1a4dddba20f659139a9175") {
+      outputDiv = document.getElementById("altair-viz-7a19c1ffca1a4dddba20f659139a9175");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "facet": {"row": {"field": "cyl", "type": "quantitative"}}, "spec": {"mark": {"type": "circle"}, "encoding": {"x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div></li>
+<li><p>Take the first faceted plot in this section:</p>
+<p>What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?</p></li>
+<li><p>When using <code>facet()</code> you should usually put the variable with more unique levels in the columns. Why?</p></li>
+</ol>
+</section>
+</section>
+<section id="geometric-objects" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-objects">Geometric objects</h2>
+<p>How are these two plots similar?</p>
+<div id="390eec90" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>chartp <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle())</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>chartf <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  .mark_line()</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>chartp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="127">
+
+<style>
+  #altair-viz-13c8d18474384c3ebb696b61a6f6075f.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-13c8d18474384c3ebb696b61a6f6075f.vega-embed details,
+  #altair-viz-13c8d18474384c3ebb696b61a6f6075f.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-13c8d18474384c3ebb696b61a6f6075f"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-13c8d18474384c3ebb696b61a6f6075f") {
+      outputDiv = document.getElementById("altair-viz-13c8d18474384c3ebb696b61a6f6075f");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "circle"}, "encoding": {"x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="4c9cd54a" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>chartf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="128">
+
+<style>
+  #altair-viz-db14fa0c82df495a8b51e0af703083e8.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-db14fa0c82df495a8b51e0af703083e8.vega-embed details,
+  #altair-viz-db14fa0c82df495a8b51e0af703083e8.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-db14fa0c82df495a8b51e0af703083e8"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-db14fa0c82df495a8b51e0af703083e8") {
+      outputDiv = document.getElementById("altair-viz-db14fa0c82df495a8b51e0af703083e8");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "line"}, "encoding": {"x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "transform": [{"loess": "hwy", "on": "displ"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#<code>{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE} #knitr::include_graphics("screenshots/altair_basic_points.png") #knitr::include_graphics("screenshots/altair_smooth_line.png") #</code></p>
+<p>Both plots contain the same x variable, the same y variable, and both describe the same data. But the plots are not identical. Each plot uses a different visual object to represent the data. In Altair syntax, we say that they use different <strong>marks</strong>.</p>
+<p>A <strong>mark</strong> is the geometrical object that a plot uses to represent data. People often describe plots by the type of mark that the plot uses. For example, bar charts use bar marks, line charts use line marks, boxplots use boxplot marks, and so on. Scatterplots break the trend; they use the point mark. As we see above, you can use different marks to plot the same data. The first plot uses the point mark, and the second plot uses the line mark, a smooth line fitted to the data is calculated using a transformation. To change the mark in your plot, change the mark function that you add to <code>Chart()</code>.</p>
+<p>Every mark function in Altair has <code>encode</code> arguments. However, not every encoding works with every mark. You could set the shape of a point, but you couldn’t set the “shape” of a line. On the other hand, you <em>could</em> set the type of line. <code>.mark_line()</code> will draw a different line, with a different <code>strokeDash</code>, for each unique value of the variable that you map to <code>strokeDash</code>.</p>
+<div id="c5169526" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>chartl <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    strokeDash <span class="op">=</span> <span class="st">"drv"</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    .mark_line())</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>chartl.save(<span class="st">"screenshots/altair_dashed_lines.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>#<code>{R, echo=FALSE, fig.align="left"} #knitr::include_graphics("screenshots/altair_dashed_lines.png") #</code></p>
+<p>Here <code>.mark_line()</code> separates the cars into three lines based on their <code>drv</code> value, which describes a car’s drivetrain. One line describes all of the points with a <code>4</code> value, one line describes all of the points with an <code>f</code> value, and one line describes all of the points with an <code>r</code> value. Here, <code>4</code> stands for four-wheel drive, <code>f</code> for front-wheel drive, and <code>r</code> for rear-wheel drive.</p>
+<p>If this sounds strange, we can make it more clear by overlaying the lines on top of the raw data and then coloring everything according to <code>drv</code>.</p>
+<div id="e47eca77" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>chartp <span class="op">=</span> (alt.Chart(mpg).</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  mark_circle().</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  encode(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    strokeDash <span class="op">=</span> <span class="st">"drv"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> <span class="st">"drv"</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> chartp <span class="op">+</span> chartp.transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>]).mark_line()</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>chart.save(<span class="st">"screenshots/altair_points_dashed_lines.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{R, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_points_dashed_lines.png")
+``` -->
+<p>Notice that this plot contains two marks in the same graph! If this makes you excited, buckle up. We will learn how to place multiple marks on the same chart very soon.</p>
+<p>Altair provides about 15 marks. The best way to get a comprehensive overview is the Altair marks page, which you can find at <a href="https://altair-viz.github.io/user_guide/marks.html" class="uri">https://altair-viz.github.io/user_guide/marks.html</a>.</p>
+<p>Many marks, like <code>.mark_line()</code>, use a single mark object to display multiple rows of data. For these marks, you can set the <code>detail</code> encoding to a categorical variable to draw multiple objects. Altair will draw a separate object for each unique value of the detail variable. In practice, Altair will automatically group the data for these marks whenever you map an encoding to a discrete variable (as in the <code>strokeDash</code> example). It is convenient to rely on this feature because the detail encoding by itself does not add a legend or distinguishing features to the marks.</p>
+<div id="686d6e01" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>chartleft <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  .mark_line())</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>chartmiddle <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    detail <span class="op">=</span> <span class="st">"drv"</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>])</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  .mark_line())</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>chartright <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>alt.Color(<span class="st">"drv"</span>, legend<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>])</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  .mark_line())</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>chartleft.save(<span class="st">"screenshots/altair_chartleft.png"</span>)</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>chartmiddle.save(<span class="st">"screenshots/altair_chartmiddle.png"</span>)</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>chartright.save(<span class="st">"screenshots/altair_chartright.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r, fig.width = 3, fig.align = 'default', out.width = "33%", message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_chartleft.png")
+#knitr::include_graphics("screenshots/altair_chartmiddle.png")
+#knitr::include_graphics("screenshots/altair_chartright.png")
+``` -->
+<p>To display multiple marks in the same plot, you can used <a href="https://altair-viz.github.io/user_guide/compound_charts.html">layered charts</a> as shown in the example below that uses the <code>chartleft</code> object from the above code chunk:</p>
+<div id="158f68d1" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>chartp <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  .mark_circle()</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> chartp <span class="op">+</span> chartleft  </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>chart.save(<span class="st">"screenshots/altair_chartcombine.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_chartcombine.png")
+``` -->
+<p>This, however, introduces some duplication in our code. Imagine if you wanted to change the y-axis to display <code>cty</code> instead of <code>hwy</code>. You’d need to change the variable in two places, and you might forget to update one. You can avoid this type of repetition by passing a set of encodings to a base <code>alt.Chart()</code>. Altair will treat these encodings as global encodings that apply to each mark layer in the layered chart. In other words, this code will produce the same plot as the previous code:</p>
+<div id="6dc8e18e" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> base.mark_circle() <span class="op">+</span> base.transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>).mark_line()</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>chart.save(<span class="st">"screenshots/altair_combine_clean.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean.png")
+``` -->
+<p>If you place encodings in an encode function, Altair will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the base encodings <em>for that layer only</em>. This makes it possible to display different aesthetics in different layers. Alatair automatically chooses useful plot settings and chart configurations to allow you to think about data instead of the programming mechanics of the chart. You can review their guidance on <a href="https://altair-viz.github.io/user_guide/customization.html">customizing visualizations</a> to see the varied ways to change the look of your graphic.</p>
+<div id="bfddecbd" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span>(alt.Chart(mpg)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> base.encode(color <span class="op">=</span> <span class="st">"drv"</span>).mark_circle() <span class="op">+</span> base.transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>).mark_line()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>chart.save(<span class="st">"screenshots/altair_combine_clean_color.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean_color.png")
+``` -->
+<p>You can use the same idea to specify different data for each layer. Here, our smooth line displays just a subset of the <code>mpg</code> dataset, the subcompact cars. The <code>.transform_filter</code> method overrides the global data from the base chart for that layer only.</p>
+<div id="3692c2df" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#column name of class does not work nicely with Altair filter.</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> (alt.Chart(mpg.rename(columns <span class="op">=</span> {<span class="st">"class"</span>: <span class="st">"class1"</span>}))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>chart_smooth_sub <span class="op">=</span> (base</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  .transform_filter(alt.datum.class1 <span class="op">==</span> <span class="st">"subcompact"</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  .mark_line()</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>)  </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> base.encode(color <span class="op">=</span> <span class="st">"class1"</span>).mark_circle() <span class="op">+</span> chart_smooth_sub</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>chart.save(<span class="st">"screenshots/altair_combine_clean_color_filter.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean_color_filter.png")
+``` -->
+<p>(You’ll learn how <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.filter.html">pandas filter</a> works in the chapter on data transformations. To keep the same base chart, <a href="https://altair-viz.github.io/user_guide/transform/filter.html">filtering</a> is done with Altair in this example: for now, just know that this command selects only the subcompact cars.)</p>
+<section id="exercises-3" class="level3">
+<h3 class="anchored" data-anchor-id="exercises-3">Exercises</h3>
+<ol type="1">
+<li><p>What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?</p></li>
+<li><p>What does <code>legend=None</code> in <code>alt.Color()</code> do? What happens if you remove it? Why do you think I used it earlier in the chapter?</p></li>
+<li><p>Recreate the Python code necessary to generate the following graphs.</p></li>
+</ol>
+<div id="6724d30a" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>smooth1 <span class="op">=</span> base.transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>).mark_line()</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>smooth3 <span class="op">=</span> base.transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>]).mark_line()</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>chart1 <span class="op">=</span> base.mark_circle() <span class="op">+</span> smooth1</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>chart2 <span class="op">=</span> base.mark_circle() <span class="op">+</span> smooth3.encode(detail <span class="op">=</span> <span class="st">"drv"</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>chart3 <span class="op">=</span> base.mark_circle().encode(color <span class="op">=</span> <span class="st">"drv"</span>) <span class="op">+</span> smooth3.encode(color <span class="op">=</span> <span class="st">"drv"</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>chart4 <span class="op">=</span> base.mark_circle().encode(color <span class="op">=</span> <span class="st">"drv"</span>) <span class="op">+</span> smooth1</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>chart5 <span class="op">=</span> base.mark_circle().encode(color <span class="op">=</span> <span class="st">"drv"</span>) <span class="op">+</span> smooth3.encode(strokeDash <span class="op">=</span> <span class="st">"drv"</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>chart6 <span class="op">=</span> (base</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> alt.ColorValue(<span class="st">"darkgrey"</span>),</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    size <span class="op">=</span> alt.SizeValue(<span class="dv">125</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  .mark_point(filled <span class="op">=</span> <span class="va">True</span>)) <span class="op">+</span> base.mark_circle().encode(color <span class="op">=</span> <span class="st">"drv"</span>)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>chart1.save(<span class="st">"screenshots/altair_q_c1.png"</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>chart2.save(<span class="st">"screenshots/altair_q_c2.png"</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>chart3.save(<span class="st">"screenshots/altair_q_c3.png"</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>chart4.save(<span class="st">"screenshots/altair_q_c4.png"</span>)</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>chart5.save(<span class="st">"screenshots/altair_q_c5.png"</span>)</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>chart6.save(<span class="st">"screenshots/altair_q_c6.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>#```{r echo = FALSE, fig.width = 3, out.width = “50%”, fig.align = “default”, message = FALSE} #knitr::include_graphics(“screenshots/altair_q_c1.png”) #knitr::include_graphics(“screenshots/altair_q_c2.png”) #knitr::include_graphics(“screenshots/altair_q_c3.png”) #knitr::include_graphics(“screenshots/altair_q_c4.png”) #knitr::include_graphics(“screenshots/altair_q_c5.png”) #knitr::include_graphics(“screenshots/altair_q_c6.png”)</p>
+<pre><code>
+## Statistical transformations
+
+Next, let's take a look at a bar chart. Bar charts seem simple, but they are interesting because they reveal something subtle about plots. Consider a basic bar chart, as drawn with `.mark_bar()`. The following chart displays the total number of diamonds in the `diamonds` dataset, grouped by `cut`. The `diamonds` dataset comes in ggplot2 R package and can be used in Python using the following Python command. Note that we also need to use pandas to format a few of the columns as ordered categorical to have the diamonds DataFrame act like it does in R.
+
+::: {#451801aa .cell execution_count=27}
+``` {.python .cell-code}
+url = "https://github.com/byuidatascience/data4python4ds/raw/master/data-raw/diamonds/diamonds.csv"
+diamonds = pd.read_csv(url)
+
+diamonds['cut'] = pd.Categorical(diamonds.cut, 
+  ordered = True, 
+  categories =  ["Fair", "Good", "Very Good", "Premium", "Ideal" ])
+
+diamonds['color'] = pd.Categorical(diamonds.color, 
+  ordered = True, 
+  categories =  ["D", "E", "F", "G", "H", "I", "J"])
+
+
+diamonds['clarity'] = pd.Categorical(diamonds.clarity, 
+  ordered = True, 
+  categories =  ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"])
+
+```
+:::
+
+
+It contains information about ~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond. The chart shows that more diamonds are available with high quality cuts than with low quality cuts. 
+
+::: {#f41a29b6 .cell execution_count=28}
+``` {.python .cell-code}
+chart = (alt.Chart(diamonds)
+  .encode(
+    x = "cut",
+    y = alt.Y("count():Q")
+    )
+  .mark_bar()
+  .properties(width = 400))
+
+chart
+```
+
+::: {.cell-output .cell-output-display execution_count=138}
+```{=html}
+
+&lt;style&gt;
+  #altair-viz-3ec63d4515414f2d924f46a659ecc13e.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-3ec63d4515414f2d924f46a659ecc13e.vega-embed details,
+  #altair-viz-3ec63d4515414f2d924f46a659ecc13e.vega-embed details summary {
+    position: relative;
+  }
+&lt;/style&gt;
+&lt;div id="altair-viz-3ec63d4515414f2d924f46a659ecc13e"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-3ec63d4515414f2d924f46a659ecc13e") {
+      outputDiv = document.getElementById("altair-viz-3ec63d4515414f2d924f46a659ecc13e");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () =&gt; {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () =&gt; reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `&lt;div class="error" style="color:red;"&gt;${err}&lt;/div&gt;`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err =&gt; showError(`Javascript Error: ${err.message}&lt;br&gt;This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" &amp;&amp; define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err =&gt; showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() =&gt; maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() =&gt; maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() =&gt; displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "type": "quantitative"}}, "width": 400, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+&lt;/script&gt;
+```
+:::
+:::
+
+
+#```{r, out.height="20%", echo=FALSE}
+#knitr::include_graphics("screenshots/altair_diamond_bar.png")</code></pre>
+<p>On the x-axis, the chart displays <code>cut</code>, a variable from <code>diamonds</code>. On the y-axis, it displays count, but count is not a variable in <code>diamonds</code>! Many graphs, like scatterplots, plot the raw values of your dataset. Other graphs, like bar charts, calculate new values to plot:</p>
+<ul>
+<li><p>bar charts, histograms, and frequency polygons bin your data and then plot bin counts, the number of points that fall in each bin.</p></li>
+<li><p>smoothers fit a model to your data and then plot predictions from the model.</p></li>
+<li><p>boxplots compute a robust summary of the distribution and then display a specially formatted box.</p></li>
+</ul>
+<p>The algorithm used to calculate new values for a graph is called a <strong>transform</strong>, short for transformation. The figure below describes how this process works with <code>.mark_bar()</code>.</p>
+<p>#```{r, echo = FALSE, out.width = “100%”} #knitr::include_graphics(“images/visualization-stat-bar-altair.png”)</p>
+<pre><code>
+You must explicitely define the transformation a mark uses through transformations using `alt.Y()` or `alt.X()` function. For example, `mark_bar()` requires the `y` encoding `alt.Y("count():Q")`. A histogram is created using `.mark_bar()` with transformations on both the x and y axes. The `bin` argument accepts a boolean or an `alt.Bin()` function where the argument `maxbins` can be used - `bin=alt.Bin(maxbins=100)`.
+
+::: {#d714788f .cell execution_count=29}
+``` {.python .cell-code}
+chart = (alt.Chart(diamonds)
+  .encode(
+    x =alt.X("price", bin=True),
+    y =alt.Y("count()")
+    )
+  .mark_bar())
+
+chart
+```
+
+::: {.cell-output .cell-output-display execution_count=139}
+```{=html}
+
+&lt;style&gt;
+  #altair-viz-0dab12e964fb44908884851990aab270.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-0dab12e964fb44908884851990aab270.vega-embed details,
+  #altair-viz-0dab12e964fb44908884851990aab270.vega-embed details summary {
+    position: relative;
+  }
+&lt;/style&gt;
+&lt;div id="altair-viz-0dab12e964fb44908884851990aab270"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-0dab12e964fb44908884851990aab270") {
+      outputDiv = document.getElementById("altair-viz-0dab12e964fb44908884851990aab270");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () =&gt; {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () =&gt; reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `&lt;div class="error" style="color:red;"&gt;${err}&lt;/div&gt;`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err =&gt; showError(`Javascript Error: ${err.message}&lt;br&gt;This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" &amp;&amp; define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err =&gt; showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() =&gt; maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() =&gt; maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() =&gt; displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"x": {"bin": true, "field": "price", "type": "quantitative"}, "y": {"aggregate": "count", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+&lt;/script&gt;
+```
+:::
+:::
+
+
+#```{r, echo = FALSE, out.height = "50%"}
+#knitr::include_graphics("screenshots/altair_histogram.png")</code></pre>
+<p>For more complicated transformations Altair provides <strong>transform</strong> functions. We saw one of these transforms previously when we used <code>.mark_line()</code> to describe each drive type. If you are working with pandas DataFrames then you may want to do these transformations using pandas. <a href="https://altair-viz.github.io/user_guide/transform/index.html">Altair’s transformations</a> can be used with DataFrames as well as JSON files or URL pointers to CSV files.</p>
+<div id="d0da948a" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>chartright <span class="op">=</span> (alt.Chart(mpg)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"displ"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="st">"hwy"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>alt.Color(<span class="st">"drv"</span>, legend<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  .transform_loess(<span class="st">"displ"</span>, <span class="st">"hwy"</span>, groupby <span class="op">=</span> [<span class="st">"drv"</span>])</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  .mark_line())</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>chartright</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="140">
+
+<style>
+  #altair-viz-58f4b08e978243dc87ed33d1e424f2c7.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-58f4b08e978243dc87ed33d1e424f2c7.vega-embed details,
+  #altair-viz-58f4b08e978243dc87ed33d1e424f2c7.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-58f4b08e978243dc87ed33d1e424f2c7"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-58f4b08e978243dc87ed33d1e424f2c7") {
+      outputDiv = document.getElementById("altair-viz-58f4b08e978243dc87ed33d1e424f2c7");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-bc7fc20d2fb9a94416e89f69941e6a24.json", "format": {"type": "json"}}, "mark": {"type": "line"}, "encoding": {"color": {"field": "drv", "legend": null, "type": "nominal"}, "x": {"field": "displ", "type": "quantitative"}, "y": {"field": "hwy", "type": "quantitative"}}, "transform": [{"loess": "hwy", "on": "displ", "groupby": ["drv"]}], "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#```{r, fig.width = 3, fig.align = ‘default’, message = FALSE, echo=FALSE} #knitr::include_graphics(“screenshots/altair_chartright.png”)</p>
+<pre><code>
+Finally, `.mark_boxplot()` is available which does the statistical transformations for you after you specify the encodings for the x and y axes.
+
+::: {#cf730d97 .cell execution_count=31}
+``` {.python .cell-code}
+chart = (alt.Chart(diamonds)
+  .encode(
+    y ="price",
+    x ="cut"
+    )
+  .mark_boxplot(size = 25)
+  .properties(width = 300))
+
+chart
+```
+
+::: {.cell-output .cell-output-display execution_count=141}
+```{=html}
+
+&lt;style&gt;
+  #altair-viz-58518834ea3c443690dc31f460c5a74e.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-58518834ea3c443690dc31f460c5a74e.vega-embed details,
+  #altair-viz-58518834ea3c443690dc31f460c5a74e.vega-embed details summary {
+    position: relative;
+  }
+&lt;/style&gt;
+&lt;div id="altair-viz-58518834ea3c443690dc31f460c5a74e"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-58518834ea3c443690dc31f460c5a74e") {
+      outputDiv = document.getElementById("altair-viz-58518834ea3c443690dc31f460c5a74e");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () =&gt; {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () =&gt; reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `&lt;div class="error" style="color:red;"&gt;${err}&lt;/div&gt;`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err =&gt; showError(`Javascript Error: ${err.message}&lt;br&gt;This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" &amp;&amp; define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err =&gt; showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() =&gt; maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() =&gt; maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() =&gt; displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "boxplot", "size": 25}, "encoding": {"x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"field": "price", "type": "quantitative"}}, "width": 300, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+&lt;/script&gt;
+```
+:::
+:::
+
+
+#```{r, echo = FALSE, out.width = "50%"}
+#knitr::include_graphics("screenshots/altair_boxplot.png")</code></pre>
+</section>
+</section>
+<section id="position-adjustments" class="level2">
+<h2 class="anchored" data-anchor-id="position-adjustments">Position adjustments</h2>
+<p>There’s one more piece of magic associated with bar charts. You can colour a bar chart using either the <code>stroke</code> aesthetic, or, more usefully, <code>color</code>:</p>
+<div id="bed439bf" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>chart_left <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"cut"</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> alt.Y(<span class="st">"count()"</span>),</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    stroke <span class="op">=</span> <span class="st">"cut"</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  .mark_bar()</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  .properties(width <span class="op">=</span> <span class="dv">200</span>))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>chart_right <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"cut"</span>,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> alt.Y(<span class="st">"count()"</span>),</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> <span class="st">"cut"</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  .mark_bar()</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  .properties(width <span class="op">=</span> <span class="dv">200</span>)) </span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>chart_left</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="142">
+
+<style>
+  #altair-viz-dcdbaedb00774923a2cb7de8ff9a014e.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-dcdbaedb00774923a2cb7de8ff9a014e.vega-embed details,
+  #altair-viz-dcdbaedb00774923a2cb7de8ff9a014e.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-dcdbaedb00774923a2cb7de8ff9a014e"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-dcdbaedb00774923a2cb7de8ff9a014e") {
+      outputDiv = document.getElementById("altair-viz-dcdbaedb00774923a2cb7de8ff9a014e");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"stroke": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "type": "quantitative"}}, "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p><code>{pytho, cache= FALSE} chart_right</code></p>
+<p>#```{r out.width = “50%”, fig.align = “default”, echo=FALSE} #knitr::include_graphics(“screenshots/altair_bar_linecolor.png”) #knitr::include_graphics(“screenshots/altair_bar_fillcolor.png”)</p>
+<pre><code>
+Note what happens if you map the color encoding to another variable, like `clarity`: the bars are automatically stacked. Each colored rectangle represents a combination of `cut` and `clarity`.
+
+::: {#66490b2b .cell execution_count=33}
+``` {.python .cell-code}
+chart = (alt.Chart(diamonds)
+  .encode(
+    x = "cut",
+    y = alt.Y("count()"),
+    color = "clarity"
+    )
+  .mark_bar()
+  .properties(width = 200))
+  
+chart 
+```
+
+::: {.cell-output .cell-output-display execution_count=143}
+```{=html}
+
+&lt;style&gt;
+  #altair-viz-cf6120d79974472488fdebb5c898de57.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-cf6120d79974472488fdebb5c898de57.vega-embed details,
+  #altair-viz-cf6120d79974472488fdebb5c898de57.vega-embed details summary {
+    position: relative;
+  }
+&lt;/style&gt;
+&lt;div id="altair-viz-cf6120d79974472488fdebb5c898de57"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-cf6120d79974472488fdebb5c898de57") {
+      outputDiv = document.getElementById("altair-viz-cf6120d79974472488fdebb5c898de57");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () =&gt; {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () =&gt; reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `&lt;div class="error" style="color:red;"&gt;${err}&lt;/div&gt;`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err =&gt; showError(`Javascript Error: ${err.message}&lt;br&gt;This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" &amp;&amp; define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err =&gt; showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() =&gt; maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() =&gt; maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() =&gt; displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "type": "quantitative"}}, "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+&lt;/script&gt;
+```
+:::
+:::
+
+
+#```{r, out.width = "60%", echo=FALSE}
+#knitr::include_graphics("screenshots/stacked_barchart.png")</code></pre>
+<p>The stacking is performed automatically by <code>.mark_bar()</code>. If you don’t want a stacked bar chart, you can use use the <code>stack</code> argument in <code>alt.Y()</code> one of three other options: <code>"identity"</code>, <code>"dodge"</code> or <code>"fill"</code>.</p>
+<ul>
+<li><p><code>position = "identity"</code> will place each object exactly where it falls in the context of the graph. This is not very useful for bars, because it overlaps them. To see that overlapping we either need to make the bars slightly transparent by setting <code>alpha</code> to a small value, or completely transparent by setting <code>fill = NA</code>.</p>
+<div id="cf6437ec" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>chart_left <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    .encode(</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>      x <span class="op">=</span> <span class="st">"cut"</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>      y <span class="op">=</span> alt.Y(<span class="st">"count()"</span>, stack<span class="op">=</span><span class="va">None</span>),</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>      color <span class="op">=</span> <span class="st">"clarity"</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>      opacity <span class="op">=</span> alt.value(<span class="dv">1</span><span class="op">/</span><span class="dv">5</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    .mark_bar()</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    .properties(width <span class="op">=</span> <span class="dv">200</span>))</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>chart_right <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    .encode(</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>      x <span class="op">=</span> <span class="st">"cut"</span>,</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>      y <span class="op">=</span> alt.Y(<span class="st">"count()"</span>, stack<span class="op">=</span><span class="va">None</span>),</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>      stroke <span class="op">=</span> <span class="st">"clarity"</span>,</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>      color <span class="op">=</span> alt.value(<span class="st">"none"</span>)</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>    .mark_bar()</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>    .properties(width <span class="op">=</span> <span class="dv">200</span>))</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>chart_left</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="144">
+
+<style>
+  #altair-viz-11ec3cd5b3b1421abac48b2303cd2705.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-11ec3cd5b3b1421abac48b2303cd2705.vega-embed details,
+  #altair-viz-11ec3cd5b3b1421abac48b2303cd2705.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-11ec3cd5b3b1421abac48b2303cd2705"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-11ec3cd5b3b1421abac48b2303cd2705") {
+      outputDiv = document.getElementById("altair-viz-11ec3cd5b3b1421abac48b2303cd2705");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "opacity": {"value": 0.2}, "x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "stack": null, "type": "quantitative"}}, "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<div id="c98ef0b0" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>chart_right</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="145">
+
+<style>
+  #altair-viz-818eef824c0646fbb0b6a8eb0035353e.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-818eef824c0646fbb0b6a8eb0035353e.vega-embed details,
+  #altair-viz-818eef824c0646fbb0b6a8eb0035353e.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-818eef824c0646fbb0b6a8eb0035353e"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-818eef824c0646fbb0b6a8eb0035353e") {
+      outputDiv = document.getElementById("altair-viz-818eef824c0646fbb0b6a8eb0035353e");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"color": {"value": "none"}, "stroke": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "stack": null, "type": "quantitative"}}, "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#```{r out.width = “50%”, fig.align = “default”, echo = FALSE} #knitr::include_graphics(“screenshots/altair_nostack_opacity.png”) #knitr::include_graphics(“screenshots/altair_nostack_lines.png”) ````</p></li>
+<li><p><code>position = "fill"</code> works like stacking, but makes each set of stacked bars the same height. This makes it easier to compare proportions across groups.</p>
+<div id="e4fca115" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  .mark_bar()</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="st">"cut"</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> alt.Y(<span class="st">"count()"</span>, stack<span class="op">=</span><span class="st">'normalize'</span>),</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> <span class="st">"clarity"</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  .mark_bar()</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  .properties(width <span class="op">=</span> <span class="dv">200</span>))</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="146">
+
+<style>
+  #altair-viz-998b8c68fc714023b9e8d222eb58b5c3.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-998b8c68fc714023b9e8d222eb58b5c3.vega-embed details,
+  #altair-viz-998b8c68fc714023b9e8d222eb58b5c3.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-998b8c68fc714023b9e8d222eb58b5c3"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-998b8c68fc714023b9e8d222eb58b5c3") {
+      outputDiv = document.getElementById("altair-viz-998b8c68fc714023b9e8d222eb58b5c3");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "x": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "y": {"aggregate": "count", "stack": "normalize", "type": "quantitative"}}, "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#```{r, out.width = “50%”} #knitr::include_graphics(“screenshots/altair_normalize_bar.png”) ````</p></li>
+<li><p>Placing overlapping objects directly <em>beside</em> one another is done by using the <code>column</code> encoding. This makes it easier to compare individual values with a common baseline.</p>
+<div id="1eabdd05" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (alt.Chart(diamonds)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  .encode(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'clarity'</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">'count()'</span>),</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'clarity'</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span><span class="st">'cut'</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  .mark_bar())</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="147">
+
+<style>
+  #altair-viz-f4e7cdb7914d47c4a3259901ebfb9775.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-f4e7cdb7914d47c4a3259901ebfb9775.vega-embed details,
+  #altair-viz-f4e7cdb7914d47c4a3259901ebfb9775.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-f4e7cdb7914d47c4a3259901ebfb9775"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-f4e7cdb7914d47c4a3259901ebfb9775") {
+      outputDiv = document.getElementById("altair-viz-f4e7cdb7914d47c4a3259901ebfb9775");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "altair-data-821e12dec74ef8115ecf0913bb5859a1.json", "format": {"type": "json"}}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "column": {"field": "cut", "sort": ["Fair", "Good", "Very Good", "Premium", "Ideal"], "type": "ordinal"}, "x": {"field": "clarity", "sort": ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], "type": "ordinal"}, "y": {"aggregate": "count", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json"}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>#```{r, echo=FALSE, out.width = “100%”} #knitr::include_graphics(“screenshots/altair_position_dodge.png”) ````</p></li>
+</ul>
+<p>Altair does not have a simple way to add random jitter to points using an encoding or simple argument to <code>alt.X()</code> or <code>alt.Y()</code>. Altair can create a jittered point plot, also called a <a href="https://altair-viz.github.io/gallery/stripplot.html">stripplot</a>. However, it is not as straight forward.</p>
+<p>We should note that Altair also does not provide piechart or donut chart marks as well.</p>
+</section>
+<section id="coordinate-systems-maps" class="level2">
+<h2 class="anchored" data-anchor-id="coordinate-systems-maps">Coordinate systems (maps)</h2>
+<p>Coordinate systems are generally on an x and y axis in Altair. This coordinate system is the Cartesian coordinate system, where the x and y positions act independently to determine the location of each point. Maps are on a Cartesian coordinate system, but their behavior is different as they require a <a href="https://altair-viz.github.io/gallery/world_projections.html">transformation or projection</a> of the globe to an x and y Cartesian plane.</p>
+<p>Visualizing data on maps can get complicated quickly. Altair has a some <a href="https://altair-viz.github.io/gallery/index.html#maps">mapping marks</a> available for charts. The data formats for plotting with maps also get more involved. You can use the <a href="https://iliatimofeev.github.io/gpdvega/">gpdvega</a> package to help with spatial data in Altair. Many Python users us <a href="https://geopandas.org/">geopandas</a> or <a href="https://pypi.org/project/Shapely/1.6.3/">Shapely</a> to handle spatial data in Python. <a href="https://www.e-education.psu.edu/geog489/node/2201">PennState has a nice list</a> of spatial tools for Python.</p>
+</section>
+<section id="the-layered-grammar-of-graphics" class="level2">
+<h2 class="anchored" data-anchor-id="the-layered-grammar-of-graphics">The layered grammar of graphics</h2>
+<p>In the previous sections, you learned much more than how to make scatterplots, bar charts, and boxplots. You learned a foundation that you can use to make <em>any</em> type of plot with Altair. To see this, let’s add position adjustments, stats, coordinate systems, and faceting to our code template:</p>
+<pre><code>(alt.Chart(&lt;DATA&gt;)
+  .encoding(
+    
+    )
+  .facet(
+    column = &lt;FACET VARIABLE&gt;
+    )
+  .&lt;TRANFORM_FUNCTION&gt;()
+  .&lt;MARK_FUNCTION&gt;()
+  .properties(
+    width = ,
+    height = 
+  ))</code></pre>
+<p>Altair’s general template takes four main parameters - <code>alt.Chart()</code>, <code>.mark_*()</code>, <code>.encode()</code>, and <code>.facet()</code>. In practice, only need to supply the first three parameters to make a chart because Altair will provide useful defaults for everything except the data, the encodings, and the mark function.</p>
+<p>The parameters in the template compose the grammar of graphics, a formal system for building plots. The grammar of graphics is based on the insight that you can uniquely describe <em>any</em> plot as a combination of a dataset, a mark, a set of encodings, a transformation, a position adjustment, and a faceting scheme.</p>
+<p>To see how this works, consider how you could build a basic plot from scratch: you could start with a dataset and then transform it into the information that you want to display (with a stat).</p>
+<p>#```{r, echo = FALSE, out.width = “100%”} #knitr::include_graphics(“images/visualization-grammar-1-altair.png”)</p>
+<pre><code>
+Next, you could choose a geometric object to represent each observation in the transformed data. You could then use the aesthetic properties of the geoms to represent variables in the data. You would map the values of each variable to the levels of an aesthetic.
+
+#```{r, echo = FALSE, out.width = "100%"}
+#knitr::include_graphics("images/visualization-grammar-2-altair.png")</code></pre>
+<p>You’d then select a coordinate system to place the geoms into. You’d use the location of the objects (which is itself an aesthetic property) to display the values of the x and y variables. At that point, you would have a complete graph, but you could further adjust the positions of the geoms within the coordinate system (a position adjustment) or split the graph into subplots (faceting). You could also extend the plot by adding one or more additional layers, where each additional layer uses a dataset, a geom, a set of mappings, a stat, and a position adjustment.</p>
+<p>#```{r, echo = FALSE, out.width = “100%”} #knitr::include_graphics(“images/visualization-grammar-3-altair.png”) ````</p>
+<p>You could use this method to build <em>any</em> plot that you imagine. In other words, you can use the code template that you’ve learned in this chapter to build hundreds of thousands of unique plots.</p>
+</section>
+<section id="altairs-grammar-of-graphics" class="level2">
+<h2 class="anchored" data-anchor-id="altairs-grammar-of-graphics">Altair’s grammar of graphics</h2>
+<p><a href="https://plotnine.readthedocs.io/en/stable/index.html">Plotnine</a> is a Python implementation of <a href="https://ggplot2.tidyverse.org/">ggplot2 in R’s</a> grammar of graphics using <a href="https://matplotlib.org/">matplotlib</a> as the plotting backend. Altair’s implementation of the grammar of graphics is much like ggplot2 or plotnine at a high level. However, it uses the <a href="https://vega.github.io/vega-lite/">Vega-Lite</a> grammar of graphics constructs and plotting backend.</p>
+<p>Below are some useful links that will help you dig deeper into the Altair implementation of the grammar of graphics.</p>
+<ul>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/marks.html">mark guidance</a></li>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/encoding.html">encoding guidance</a></li>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/compound_charts.html?highlight=bin%20scale">facet guidance</a></li>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/transform/index.html">tranformations guidance</a></li>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/customization.html">chart customization</a></li>
+<li>Altair <a href="https://altair-viz.github.io/gallery/bar_chart_sorted.html">sorting barcharts</a></li>
+<li>Altair <a href="https://towardsdatascience.com/consistently-beautiful-visualizations-with-altair-themes-c7f9f889602">theme editing</a></li>
+<li>Altair <a href="https://altair-viz.github.io/user_guide/encoding.html?highlight=data%20types#encoding-data-types">Encoding data types</a></li>
+</ul>
+<!-- https://github.com/altair-viz/altair/issues/1021 -->
+<!-- https://altair-viz.github.io/gallery/scatter_marginal_hist.html -->
+<!-- https://altair-viz.github.io/case_studies/exploring-weather.html -->
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

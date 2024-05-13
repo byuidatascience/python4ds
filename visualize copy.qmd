@@ -11,34 +11,46 @@ If you'd like to learn more about Altair before you start, I'd recommend reading
 
 We should note that we are building this book using R with the package bookdown.  Rendering Altair graphics using a python chunk is not straight forward but is not important for our use in VS Code. In VS Code the example chunks will render in the interactive Python viewer automatically. The following R code chunks show how we are rendering the Altair graphics in this book. Thanks to ijlyttle for [his GitHub Gist](https://gist.github.com/ijlyttle/aa314d02b5f7f85702ea2a648393b21f).
 
-```
-
-# ```{R, echo=FALSE}
-# vegawidget::as_vegaspec(py$chart$to_json())
-# ```
+<!-- # ```{r, echo=FALSE}
+# vegawidget::as_vegaspec(py$chart$to_json()) -->
 
 # For Python examples that show chart.save()
 
-#```{r, message = FALSE, echo=FALSE}
-#knitr::include_graphics("screenshots/chartp_chartleft.png")
-#```
-
-```
+<!-- # ```{r, message = FALSE, echo=FALSE}
+# knitr::include_graphics("screenshots/chartp_chartleft.png")
+# ``` -->
 
 ### Prerequisites
 
 This chapter focusses on Altair. Language has been shifted using the material from [Altair's materials](https://altair-viz.github.io/index.html). To access the datasets, help pages, and functions that we will use in this chapter, load the Python data science tools by running this code:
 
-```{python, cache=FALSE}
-
-import pandas as pd   
+:::: {.columns}
+::: {.column width="49%"}
+###### Altair
+```{python}
+import pandas as pd 
+import numpy as np   
 import altair as alt   
-
 ```
+:::
+::: {.column width="1%"}
+<!-- blank -->
+:::
+::: {.column width="49%"}
+###### Plotly Express
+```{python}
+import pandas as pd
+import numpy as np
+import plotly.express as px
+```
+:::
+::::
+
 
 If you run this code and get the error message "No module named 'altair'" or "No module named 'pandas'", you'll need to first install them.
 
-```{bash eval = FALSE}
+```{python}
+#| eval: FALSE
 python -m pip install pandas altair
 ```
 
@@ -51,7 +63,7 @@ When [specifying data in Altair](https://altair-viz.github.io/user_guide/data.ht
 In this book, we will save the Altair chart as a '.png' file to avoid dealing with large stored data in our '.html' files. We have elected to use the [Local Filesystem](https://altair-viz.github.io/user_guide/faq.html#local-filesystem) approach proposed by Altair. They do note that the filesystem approach may not work on some cloud-based Jupyter notebook services.
 
 
-```{python, cache=FALSE}
+```{python}
 alt.data_transformers.enable('json')
 ```
 
@@ -64,7 +76,7 @@ Let's use our first graph to answer a question: Do cars with big engines use mor
 
 You can test your answer with the `mpg` __data frame__ found in ggplot2 (aka  `ggplot2::mpg`). A data frame is a rectangular collection of variables (in the columns) and observations (in the rows). The *'mpg'* data contains observations collected by the US Environmental Protection Agency on 38 models of car. We will identify the *'mpg'* data using `mpg` for the remainder of this introduction.
 
-```{python, cache=FALSE}
+```{python}
 url = "https://github.com/byuidatascience/data4python4ds/raw/master/data-raw/mpg/mpg.csv"
 mpg = pd.read_csv(url)
 
@@ -84,7 +96,7 @@ To learn more about `mpg`, read its format at [data4python4ds](https://github.co
 
 To plot `mpg`, run this code to put `displ` on the x-axis and `hwy` on the y-axis:
 
-```{python, cache=FALSE}
+```{python}
 
 chart = (alt.Chart(mpg)
   .encode(
@@ -93,13 +105,13 @@ chart = (alt.Chart(mpg)
   .mark_circle()
 )
 
-chart.save("screenshots/altair_viz_1.png")
+chart
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_viz_1.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_viz_1.png")
+#````
 
 The plot shows a negative relationship between engine size (`displ`) and fuel efficiency (`hwy`). In other words, cars with big engines use more fuel. Does this confirm or refute your hypothesis about fuel efficiency and engine size?
 
@@ -113,11 +125,11 @@ Each mark method in Altair has an `.encode()` attribute. This defines how variab
 
 Let's turn this code into a reusable template for making graphs with ggplot2. To make a graph, replace the bracketed sections in the code below with a dataset, a geom function, or a collection of mappings.
 
-```{python eval = FALSE}
+````python
 (alt.Chart(<DATA>)  
    .encode(<ENCODINGS>)
     <.mark_*()>)
-```
+````
 
 The rest of this chapter will show you how to complete and extend this template to make different types of graphs. We will begin with the `<ENCODINGS>` component.
 
@@ -157,26 +169,26 @@ chartC = (alt.Chart(mpg)
       )
   .mark_circle())
 
-chartC.save("screenshots/altair_condition_chart.png")
+chartC
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_condition_chart.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_condition_chart.png")
+#```
 
 
 Let's hypothesize that the cars are hybrids. One way to test this hypothesis is to look at the `class` value for each car. The `class` variable of the `mpg` dataset classifies cars into groups such as compact, midsize, and SUV. If the outlying points are hybrids, they should be classified as compact cars or, perhaps, subcompact cars (keep in mind that this data was collected before hybrid trucks and SUVs became popular).
 
 You can add a third variable, like `class`, to a two dimensional scatterplot by mapping it to an __encoding__. An encoding is a visual property of the objects in your plot. Encodings include things like the size, the shape, or the color of your points. You can display a point (like the one below) in different ways by changing the values of its encoded properties. Since we already use the word "value" to describe data, let's use the word "level" to describe encoded properties. Here we change the levels of a point's size, shape, and color to make the point small, triangular, or blue:
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("images/encode_example.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("images/encode_example.png")
+#```
 
 You can convey information about your data by mapping the encodings in your plot to the variables in your dataset. For example, you can map the colors of your points to the `class` variable to reveal the class of each car.
 
-```{python, cache=FALSE}
+```{python}
 
 chart = (alt.Chart(mpg)
   .encode(
@@ -186,13 +198,13 @@ chart = (alt.Chart(mpg)
     )
   .mark_circle())
 
-chart.save("screenshots/altair_viz_2.png")
+chart
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_viz_2.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_viz_2.png")
+#```
 
 (We don't prefer British English, like Hadley, so don't use `colour` instead of `color`.)
 
@@ -202,7 +214,7 @@ The colors reveal that many of the unusual points are two-seater cars. These car
 
 In the above example, we mapped `class` to the color encoding, but we could have mapped `class` to the size encoding in the same way. In this case, the exact size of each point would reveal its class affiliation. Mapping an unordered variable (`class`) to an ordered aesthetic (`size`) is not a good idea.
 
-```{python, cache=FALSE}
+```{python}
 chart = (alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -211,17 +223,17 @@ chart = (alt.Chart(mpg)
     )
   .mark_circle())
   
-chart.save("screenshots/altair_viz_3.png")
+chart
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_viz_3.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_viz_3.png")
+#```
 
 Or we could have mapped `class` to the _opacity_ encoding, which controls the transparency of the points, or to the shape encoding, which controls the shape of the points.
 
-```{python, cache=FALSE}
+```{python}
 # First
 chart1 = (alt.Chart(mpg)
   .encode(
@@ -240,16 +252,18 @@ chart2 = (alt.Chart(mpg)
     )
   .mark_point())
   
-chart1.save("screenshots/altair_opacity.png")
-chart2.save("screenshots/altair_shape.png")
-  
+chart1
+```
+
+```{python}
+chart2
 ```
 
 
-# ```{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_opacity.png")
-# knitr::include_graphics("screenshots/altair_shape.png")
-# ```
+#```{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_opacity.png")
+#knitr::include_graphics("screenshots/altair_shape.png")
+#```
 
 Altair will only use 8 shapes for one chart. Charting more than 8 shapes is not recommended as the shapes simply recycle.
 
@@ -259,7 +273,7 @@ Once you map an encoding, Altair takes care of the rest. It selects a reasonable
 
 You can also _configure_ the encoding properties of your mark manually. For example, we can make all of the points in our plot blue:
 
-```{python, cache=FALSE}
+```{python}
 
 chart = (alt.Chart(mpg)
   .encode(
@@ -269,13 +283,13 @@ chart = (alt.Chart(mpg)
     )
   .mark_circle())
 
-chart.save("screenshots/altair_viz_4.png")
+chart
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_viz_4.png")
-# ```
+#```{r, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_viz_4.png")
+#```
 
 Here, the color doesn't convey information about a variable, but only changes the appearance of the plot. To set an encoding manually, use `alt.value()` by name as an argument of your `.encode()` function; i.e. the value goes _inside_ of `alt.value()`. You'll need to pick a level that makes sense for that encoding:
 
@@ -301,40 +315,41 @@ Note that only a limited set of mark properties can be bound to encodings, so fo
 1.  What does the `stroke` encoding do? What shapes does it work with?
     (Hint: use `mark_point()`)
 
+
 ## Common problems
 
 As you start to run Python code, you're likely to run into problems. Don't worry --- it happens to everyone. I have been writing Python code for months, and every day I still write code that doesn't work!
 
-Start by carefully comparing the code that you're running to the code in the book. Python is extremely picky, and a misplaced character can make all the difference. Make sure that every `(` is matched with a `)` and every `"` is paired with another `"`. 
+Start by carefully comparing the code that you're running to the code in the book. Python is extremely picky, and a misplaced character can make all the difference. Make sure that every `(` is matched with a `)` and every `"` is paired with another `"`.
 
-One common problem when creating Altair graphics as shown in this book, is to put the `()` in the wrong place: the `(` comes before the `alt.chart()` command and the `)` has to come at the end of the command. 
+One common problem when creating Altair graphics as shown in this book, is to put the `()` in the wrong place: the `(` comes before the `alt.chart()` command and the `)` has to come at the end of the command.
 
-For example the code below works in Python. 
+For example the code below works in Python.
 
-```python
+````python
 alt.Chart(mpg).encode(x = "displ", y = "hwy").mark_circle()
-```
+````
 
 However, the complexity of the more details graphics necessitates placing the code on multiple lines. When using multiple lines we need the enclosing `()`. Make sure you haven't accidentally excluded a `(` or `)` like this
 
-```Python
+````Python
 (alt.Chart(mpg)
   .encode(
     x = "displ",
     y = "hwy")
   .mark_circle()
-```
+````
 
 or placed the `()` incorrectly like this
 
-```Python
+````Python
 (chart = alt.Chart(mpg)
   .encode(
     x = "displ",
     y = "hwy")
   .mark_circle()
 )    
-```
+````
 
 If you're still stuck, try the help. You can get help about any Altair function from their website - <https://altair-viz.github.io/>, or hovering over the function name in VS Code. If that doesn't help, carefully read the error message. Sometimes the answer will be buried there! But when you're new to Python, the answer might be in the error message but you don't yet know how to understand it. Another great tool is Google: try googling the error message, as it's likely someone else has had the same problem, and has gotten help online.
 
@@ -344,7 +359,7 @@ One way to add additional variables is with encodings. Another way, particularly
 
 To facet your plot by a single variable, use `.facet()`. Assign a discrete variable to the `.facet` argument and adjust the size of your facet grid using the `columns` argument.
 
-```{python, cache=FALSE}
+```{python}
 chart_f = (alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -356,18 +371,18 @@ chart_f = (alt.Chart(mpg)
     columns = 4
   ))
   
-chart_f.save("screenshots/altair_facet_1.png")
+chart_f
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_facet_1.png")
-# ```
+#```{R, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_facet_1.png")
+#```
 
 
 To facet your plot on the combination of two variables, the first argument of `.facet()` is `column` and the second is `row`. This time the formula should contain two discrete variable names.
 
-```{python, cache=FALSE}
+```{python}
 chart_f2 = (alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -383,9 +398,9 @@ chart_f2.save("screenshots/altair_facet_2.png")
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_facet_2.png")
-# ```
+#```{R, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_facet_2.png")
+#```
 
 If you prefer to not facet in the rows or columns dimension, simply remove that facet argument. You can read more about [compound charts in the Altair documentation](https://altair-viz.github.io/user_guide/compound_charts.html).
 
@@ -438,7 +453,7 @@ If you prefer to not facet in the rows or columns dimension, simply remove that 
 
 How are these two plots similar?
 
-```{python, cache=FALSE}
+```{python}
 chartp = (alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -455,16 +470,18 @@ chartf = (alt.Chart(mpg)
   .mark_line()
   )
 
-chartp.save("screenshots/altair_basic_points.png")  
-chartf.save("screenshots/altair_smooth_line.png")
+chartp
 
 ```
-  
 
-# ```{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_basic_points.png")
-# knitr::include_graphics("screenshots/altair_smooth_line.png")
-# ```
+```{python}
+chartf
+```
+
+#```{r, fig.width = 3, fig.align = 'default', out.width = "50%", message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_basic_points.png")
+#knitr::include_graphics("screenshots/altair_smooth_line.png")
+#```
 
 
 
@@ -475,7 +492,7 @@ A __mark__ is the geometrical object that a plot uses to represent data. People 
 Every mark function in Altair has `encode` arguments. However, not every encoding works with every mark. You could set the shape of a point, but you couldn't set the "shape" of a line. On the other hand, you _could_ set the type of line. `.mark_line()` will draw a different line, with a different `strokeDash`, for each unique value of the variable that you map to `strokeDash`.
 
 
-```{python, cache=FALSE}
+```{python}
 chartl = (alt.Chart(mpg)
   .transform_loess("displ", "hwy", groupby = ["drv"])
   .encode(
@@ -483,21 +500,21 @@ chartl = (alt.Chart(mpg)
     y = "hwy",
     strokeDash = "drv"
     )
-  .mark_line())
+    .mark_line())
   
 chartl.save("screenshots/altair_dashed_lines.png")
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_dashed_lines.png")
-# ```
+#```{R, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_dashed_lines.png")
+#```
 
 
 Here `.mark_line()` separates the cars into three lines based on their `drv` value, which describes a car's drivetrain. One line describes all of the points with a `4` value, one line describes all of the points with an `f` value, and one line describes all of the points with an `r` value. Here, `4` stands for four-wheel drive, `f` for front-wheel drive, and `r` for rear-wheel drive.
 
 If this sounds strange, we can make it more clear by overlaying the lines on top of the raw data and then coloring everything according to `drv`.
 
-```{python, echo = FALSE, message = FALSE, cache=FALSE}
+```{python, echo = FALSE, message = FALSE}
 chartp = (alt.Chart(mpg).
   mark_circle().
   encode(
@@ -513,9 +530,9 @@ chart.save("screenshots/altair_points_dashed_lines.png")
 
 ```
 
-# ```{R, echo=FALSE, fig.align="left"}
-# knitr::include_graphics("screenshots/altair_points_dashed_lines.png")
-# ```
+<!-- ```{R, echo=FALSE, fig.align="left"}
+#knitr::include_graphics("screenshots/altair_points_dashed_lines.png")
+``` -->
 
 Notice that this plot contains two marks in the same graph! If this makes you excited, buckle up. We will learn how to place multiple marks on the same chart very soon.
 
@@ -524,7 +541,7 @@ Altair provides about 15 marks. The best way to get a comprehensive overview is 
 Many marks, like `.mark_line()`, use a single mark object to display multiple rows of data. For these marks, you can set the `detail` encoding to a categorical variable to draw multiple objects. Altair will draw a separate object for each unique value of the detail variable. In practice, Altair will automatically group the data for these marks whenever you map an encoding to a discrete variable (as in the `strokeDash` example). It is convenient to rely on this feature because the detail encoding by itself does not add a legend or distinguishing features to the marks.
 
 
-```{python, cache=FALSE}
+```{python}
 chartleft = (alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -557,11 +574,11 @@ chartright.save("screenshots/altair_chartright.png")
 
 ```
 
-# ```{r, fig.width = 3, fig.align = 'default', out.width = "33%", message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_chartleft.png")
-# knitr::include_graphics("screenshots/altair_chartmiddle.png")
-# knitr::include_graphics("screenshots/altair_chartright.png")
-# ```
+<!-- ```{r, fig.width = 3, fig.align = 'default', out.width = "33%", message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_chartleft.png")
+#knitr::include_graphics("screenshots/altair_chartmiddle.png")
+#knitr::include_graphics("screenshots/altair_chartright.png")
+``` -->
 
 To display multiple marks in the same plot, you can used [layered charts](https://altair-viz.github.io/user_guide/compound_charts.html) as shown in the example below that uses the `chartleft` object from the above code chunk:
 
@@ -580,9 +597,9 @@ chart.save("screenshots/altair_chartcombine.png")
   
 ```
 
-# ```{r, message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_chartcombine.png")
-# ```
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_chartcombine.png")
+``` -->
 
 This, however, introduces some duplication in our code. Imagine if you wanted to change the y-axis to display `cty` instead of `hwy`. You'd need to change the variable in two places, and you might forget to update one. You can avoid this type of repetition by passing a set of encodings to a base `alt.Chart()`. Altair will treat these encodings as global encodings that apply to each mark layer in the layered chart.  In other words, this code will produce the same plot as the previous code:
 
@@ -599,13 +616,13 @@ chart.save("screenshots/altair_combine_clean.png")
   
 ```
 
-# ```{r, message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_combine_clean.png")
-# ```
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean.png")
+``` -->
 
 If you place encodings in an encode function, Altair will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the base encodings _for that layer only_. This makes it possible to display different aesthetics in different layers. Alatair automatically chooses useful plot settings and chart configurations to allow you to think about data instead of the programming mechanics of the chart. You can review their guidance on [customizing visualizations](https://altair-viz.github.io/user_guide/customization.html) to see the varied ways to change the look of your graphic.
 
-```{python, cache=FALSE}
+```{python}
 base =(alt.Chart(mpg)
   .encode(
     x = "displ",
@@ -618,13 +635,13 @@ chart.save("screenshots/altair_combine_clean_color.png")
 
 ```
 
-# ```{r, message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_combine_clean_color.png")
-# ```
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean_color.png")
+``` -->
 
 You can use the same idea to specify different data for each layer. Here, our smooth line displays just a subset of the `mpg` dataset, the subcompact cars. The `.transform_filter` method overrides the global data from the base chart for that layer only.
 
-```{python, cache=FALSE}
+```{python}
 #column name of class does not work nicely with Altair filter.
 
 base = (alt.Chart(mpg.rename(columns = {"class": "class1"}))
@@ -645,9 +662,9 @@ chart.save("screenshots/altair_combine_clean_color_filter.png")
 
 ```
 
-# ```{r, message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_combine_clean_color_filter.png")
-# ```
+<!-- ```{r, message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_combine_clean_color_filter.png")
+``` -->
 
 
 (You'll learn how [pandas filter](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.filter.html) works in the chapter on data transformations. To keep the same base chart, [filtering](https://altair-viz.github.io/user_guide/transform/filter.html) is done with Altair in this example: for now, just know that this command selects only the subcompact cars.)
@@ -663,7 +680,7 @@ chart.save("screenshots/altair_combine_clean_color_filter.png")
 
 1.  Recreate the Python code necessary to generate the following graphs.
 
-```{python, cache=FALSE, echo=FALSE}
+```{python, echo=FALSE}
 
 base = (alt.Chart(mpg)
   .encode(
@@ -695,21 +712,20 @@ chart6.save("screenshots/altair_q_c6.png")
 
 ```
 
-# ```{r echo = FALSE, fig.width = 3, out.width = "50%", fig.align = "default", message = FALSE}
-# knitr::include_graphics("screenshots/altair_q_c1.png")
-# knitr::include_graphics("screenshots/altair_q_c2.png")
-# knitr::include_graphics("screenshots/altair_q_c3.png")
-# knitr::include_graphics("screenshots/altair_q_c4.png")
-# knitr::include_graphics("screenshots/altair_q_c5.png")
-# knitr::include_graphics("screenshots/altair_q_c6.png")
-
-# ```
+#```{r echo = FALSE, fig.width = 3, out.width = "50%", fig.align = "default", message = FALSE}
+#knitr::include_graphics("screenshots/altair_q_c1.png")
+#knitr::include_graphics("screenshots/altair_q_c2.png")
+#knitr::include_graphics("screenshots/altair_q_c3.png")
+#knitr::include_graphics("screenshots/altair_q_c4.png")
+#knitr::include_graphics("screenshots/altair_q_c5.png")
+#knitr::include_graphics("screenshots/altair_q_c6.png")
+````
 
 ## Statistical transformations
 
 Next, let's take a look at a bar chart. Bar charts seem simple, but they are interesting because they reveal something subtle about plots. Consider a basic bar chart, as drawn with `.mark_bar()`. The following chart displays the total number of diamonds in the `diamonds` dataset, grouped by `cut`. The `diamonds` dataset comes in ggplot2 R package and can be used in Python using the following Python command. Note that we also need to use pandas to format a few of the columns as ordered categorical to have the diamonds DataFrame act like it does in R.
 
-```{python, cache=FALSE}
+```{python}
 url = "https://github.com/byuidatascience/data4python4ds/raw/master/data-raw/diamonds/diamonds.csv"
 diamonds = pd.read_csv(url)
 
@@ -731,7 +747,7 @@ diamonds['clarity'] = pd.Categorical(diamonds.clarity,
 
 It contains information about ~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond. The chart shows that more diamonds are available with high quality cuts than with low quality cuts. 
 
-```{python, cache=FALSE}
+```{python}
 chart = (alt.Chart(diamonds)
   .encode(
     x = "cut",
@@ -740,14 +756,13 @@ chart = (alt.Chart(diamonds)
   .mark_bar()
   .properties(width = 400))
 
-chart.save("screenshots/altair_diamond_bar.png")
+chart
 
 ```
 
-# ```{r, out.height="20%", echo=FALSE}
-# knitr::include_graphics("screenshots/altair_diamond_bar.png")
-# ```
-
+#```{r, out.height="20%", echo=FALSE}
+#knitr::include_graphics("screenshots/altair_diamond_bar.png")
+````
 
 On the x-axis, the chart displays `cut`, a variable from `diamonds`. On the y-axis, it displays count, but count is not a variable in `diamonds`! Many graphs, like scatterplots, plot the raw values of your dataset. Other graphs, like bar charts, calculate new values to plot:
 
@@ -762,13 +777,13 @@ On the x-axis, the chart displays `cut`, a variable from `diamonds`. On the y-ax
 
 The algorithm used to calculate new values for a graph is called a __transform__, short for transformation. The figure below describes how this process works with `.mark_bar()`.
 
-# ```{r, echo = FALSE, out.width = "100%"}
-# knitr::include_graphics("images/visualization-stat-bar-altair.png")
-# ```
+#```{r, echo = FALSE, out.width = "100%"}
+#knitr::include_graphics("images/visualization-stat-bar-altair.png")
+````
 
 You must explicitely define the transformation a mark uses through transformations using `alt.Y()` or `alt.X()` function. For example, `mark_bar()` requires the `y` encoding `alt.Y("count():Q")`. A histogram is created using `.mark_bar()` with transformations on both the x and y axes. The `bin` argument accepts a boolean or an `alt.Bin()` function where the argument `maxbins` can be used - `bin=alt.Bin(maxbins=100)`.
 
-```{python, cache=FALSE}
+```{python}
 chart = (alt.Chart(diamonds)
   .encode(
     x =alt.X("price", bin=True),
@@ -776,13 +791,13 @@ chart = (alt.Chart(diamonds)
     )
   .mark_bar())
 
-chart.save("screenshots/altair_histogram.png")
+chart
 
 ```
 
-# ```{r, echo = FALSE, out.height = "50%"}
-# knitr::include_graphics("screenshots/altair_histogram.png")
-# ```
+#```{r, echo = FALSE, out.height = "50%"}
+#knitr::include_graphics("screenshots/altair_histogram.png")
+````
 
 For more complicated transformations Altair provides __transform__ functions. We saw one of these transforms previously when we used `.mark_line()` to describe each drive type. If you are working with pandas DataFrames then you may want to do these transformations using pandas. [Altair's transformations](https://altair-viz.github.io/user_guide/transform/index.html) can be used with DataFrames as well as JSON files or URL pointers to CSV files. 
 
@@ -793,18 +808,20 @@ chartright = (alt.Chart(mpg)
     y = "hwy",
     color=alt.Color("drv", legend=None)
     )
-  .transform_loess("displ", "hwy", groupby = ["drv"]).
+  .transform_loess("displ", "hwy", groupby = ["drv"])
   .mark_line())
+
+chartright
 ```
 
 
-# ```{r, fig.width = 3, fig.align = 'default', message = FALSE, echo=FALSE}
-# knitr::include_graphics("screenshots/altair_chartright.png")
-# ```
+#```{r, fig.width = 3, fig.align = 'default', message = FALSE, echo=FALSE}
+#knitr::include_graphics("screenshots/altair_chartright.png")
+````
 
 Finally, `.mark_boxplot()` is available which does the statistical transformations for you after you specify the encodings for the x and y axes.
 
-```{python, cache=FALSE}
+```{python}
 
 chart = (alt.Chart(diamonds)
   .encode(
@@ -814,19 +831,19 @@ chart = (alt.Chart(diamonds)
   .mark_boxplot(size = 25)
   .properties(width = 300))
 
-chart.save("screenshots/altair_boxplot.png")
+chart
 ```
 
-# ```{r, echo = FALSE, out.width = "50%"}
-# knitr::include_graphics("screenshots/altair_boxplot.png")
-# ```
+#```{r, echo = FALSE, out.width = "50%"}
+#knitr::include_graphics("screenshots/altair_boxplot.png")
+````
 
 
 ## Position adjustments
 
 There's one more piece of magic associated with bar charts. You can colour a bar chart using either the `stroke` aesthetic, or, more usefully, `color`:
 
-```{python, cache=FALSE}
+```{python}
 chart_left = (alt.Chart(diamonds)
   .encode(
     x = "cut",
@@ -845,20 +862,22 @@ chart_right = (alt.Chart(diamonds)
   .mark_bar()
   .properties(width = 200)) 
 
-chart_left.save("screenshots/altair_bar_linecolor.png")
-chart_right.save("screenshots/altair_bar_fillcolor.png")
+chart_left
+```
+
+```{pytho, cache= FALSE}
+chart_right
 ```
 
 
-
-# ```{r out.width = "50%", fig.align = "default", echo=FALSE}
-# knitr::include_graphics("screenshots/altair_bar_linecolor.png")
-# knitr::include_graphics("screenshots/altair_bar_fillcolor.png")
-# ```
+#```{r out.width = "50%", fig.align = "default", echo=FALSE}
+#knitr::include_graphics("screenshots/altair_bar_linecolor.png")
+#knitr::include_graphics("screenshots/altair_bar_fillcolor.png")
+````
 
 Note what happens if you map the color encoding to another variable, like `clarity`: the bars are automatically stacked. Each colored rectangle represents a combination of `cut` and `clarity`.
 
-```{python, cache=FALSE}
+```{python}
 chart = (alt.Chart(diamonds)
   .encode(
     x = "cut",
@@ -868,13 +887,13 @@ chart = (alt.Chart(diamonds)
   .mark_bar()
   .properties(width = 200))
   
-chart.save("screenshots/stacked_barchart.png")  
+chart 
 ```
 
 
-# ```{r, out.width = "60%", echo=FALSE}
-# knitr::include_graphics("screenshots/stacked_barchart.png")
-# ```
+#```{r, out.width = "60%", echo=FALSE}
+#knitr::include_graphics("screenshots/stacked_barchart.png")
+````
 
 The stacking is performed automatically by `.mark_bar()`. If you don't want a stacked bar chart, you can use use the `stack` argument in  `alt.Y()` one of three other options: `"identity"`, `"dodge"` or `"fill"`.
 
@@ -884,7 +903,7 @@ The stacking is performed automatically by `.mark_bar()`. If you don't want a st
     slightly transparent by setting `alpha` to a small value, or completely
     transparent by setting `fill = NA`.
     
-    ```{python, cache=FALSE}
+    ```{python}
     chart_left = (alt.Chart(diamonds)
         .encode(
           x = "cut",
@@ -905,21 +924,24 @@ The stacking is performed automatically by `.mark_bar()`. If you don't want a st
         .mark_bar()
         .properties(width = 200))
     
-    chart_left.save("screenshots/altair_nostack_opacity.png")
-    chart_right.save("screenshots/altair_nostack_lines.png")
+    chart_left
+    ```
+
+    ```{python}
+    chart_right
     ```
     
 
-    # ```{r out.width = "50%", fig.align = "default", echo = FALSE}
-    # knitr::include_graphics("screenshots/altair_nostack_opacity.png")
-    # knitr::include_graphics("screenshots/altair_nostack_lines.png")
-    # ```
+      #```{r out.width = "50%", fig.align = "default", echo = FALSE}
+      #knitr::include_graphics("screenshots/altair_nostack_opacity.png")
+      #knitr::include_graphics("screenshots/altair_nostack_lines.png")
+      ````
 
 *   `position = "fill"` works like stacking, but makes each set of stacked bars
     the same height. This makes it easier to compare proportions across
     groups.
 
-    ```{python, cache=FALSE}
+    ```{python}
     chart = (alt.Chart(diamonds)
       .mark_bar()
       .encode(
@@ -930,17 +952,17 @@ The stacking is performed automatically by `.mark_bar()`. If you don't want a st
       .mark_bar()
       .properties(width = 200))
     
-    chart.save("screenshots/altair_normalize_bar.png")
+    chart
     ```
 
 
-    <!-- ```{r,  out.width = "50%"}
-    knitr::include_graphics("screenshots/altair_normalize_bar.png")
-    ``` -->
+    #```{r,  out.width = "50%"}
+    #knitr::include_graphics("screenshots/altair_normalize_bar.png")
+    ````
 
 *   Placing overlapping objects directly _beside_ one another is done by using the `column` encoding.     This makes it easier to compare individual values with a common baseline.
     
-    ```{python, cache=FALSE}
+    ```{python}
     chart = (alt.Chart(diamonds)
       .encode(
         x='clarity',
@@ -950,14 +972,14 @@ The stacking is performed automatically by `.mark_bar()`. If you don't want a st
         )
       .mark_bar())
     
-    chart.save("screenshots/altair_position_dodge.png")
+    chart
     ```
     
 
 
-    <!-- ```{r, echo=FALSE, out.width = "100%"}
-    knitr::include_graphics("screenshots/altair_position_dodge.png")
-    ``` -->
+    #```{r, echo=FALSE, out.width = "100%"}
+    #knitr::include_graphics("screenshots/altair_position_dodge.png")
+    ````
 
 Altair does not have a simple way to add random jitter to points using an encoding or simple argument to `alt.X()` or `alt.Y()`. Altair can create a jittered point plot, also called a [stripplot](https://altair-viz.github.io/gallery/stripplot.html).  However, it is not as straight forward.
 
@@ -973,7 +995,7 @@ Visualizing data on maps can get complicated quickly.  Altair has a some [mappin
 
 In the previous sections, you learned much more than how to make scatterplots, bar charts, and boxplots. You learned a foundation that you can use to make _any_ type of plot with Altair. To see this, let's add position adjustments, stats, coordinate systems, and faceting to our code template:
 
-```
+````
 (alt.Chart(<DATA>)
   .encoding(
     
@@ -987,7 +1009,7 @@ In the previous sections, you learned much more than how to make scatterplots, b
     width = ,
     height = 
   ))
-```
+````
 
 Altair's general template takes four main parameters - `alt.Chart()`, `.mark_*()`, `.encode()`, and `.facet()`. In practice, only need to supply the first three parameters to make a chart because Altair will provide useful defaults for everything except the data, the encodings, and the mark function.
 
@@ -995,21 +1017,21 @@ The parameters in the template compose the grammar of graphics, a formal system 
 
 To see how this works, consider how you could build a basic plot from scratch: you could start with a dataset and then transform it into the information that you want to display (with a stat).
 
-# ```{r, echo = FALSE, out.width = "100%"}
-# knitr::include_graphics("images/visualization-grammar-1-altair.png")
-# ```
+#```{r, echo = FALSE, out.width = "100%"}
+#knitr::include_graphics("images/visualization-grammar-1-altair.png")
+````
 
 Next, you could choose a geometric object to represent each observation in the transformed data. You could then use the aesthetic properties of the geoms to represent variables in the data. You would map the values of each variable to the levels of an aesthetic.
 
-# ```{r, echo = FALSE, out.width = "100%"}
-# knitr::include_graphics("images/visualization-grammar-2-altair.png")
-# ```
+#```{r, echo = FALSE, out.width = "100%"}
+#knitr::include_graphics("images/visualization-grammar-2-altair.png")
+````
 
 You'd then select a coordinate system to place the geoms into. You'd use the location of the objects (which is itself an aesthetic property) to display the values of the x and y variables. At that point, you would have a complete graph, but you could further adjust the positions of the geoms within the coordinate system (a position adjustment) or split the graph into subplots (faceting). You could also extend the plot by adding one or more additional layers, where each additional layer uses a dataset, a geom, a set of mappings, a stat, and a position adjustment.
 
-# ```{r, echo = FALSE, out.width = "100%"}
-# knitr::include_graphics("images/visualization-grammar-3-altair.png")
-# ```
+#```{r, echo = FALSE, out.width = "100%"}
+#knitr::include_graphics("images/visualization-grammar-3-altair.png")
+````
 
 You could use this method to build _any_ plot that you imagine. In other words, you can use the code template that you've learned in this chapter to build hundreds of thousands of unique plots.
 
